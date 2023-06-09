@@ -9,10 +9,10 @@ export function Header({title, subtitle}: HeaderProps){
     return(
         <>
             <Box>
-                <Text fontSize="25" fontWeight="700" color="black.title">
+                <Text fontSize={["20","20","28"]} fontWeight="700" color="white">
                     {title} 
                 </Text>
-                <Text fontSize="18" fontWeight="300" color="gray.500">
+                <Text fontSize={["15","15","18"]} fontWeight="400" color="gray.200">
                     {subtitle}
                 </Text>
             </Box>

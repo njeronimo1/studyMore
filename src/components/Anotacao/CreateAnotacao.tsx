@@ -77,26 +77,29 @@ export function CreateAnotacao({isOpenModal, handleOpenAnotacao, objetivoId, ano
         <>
         <Modal onClose={() => {}} isOpen={isOpenModal} isCentered size="5xl">
         <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>
-                    <Text>Realize anotações sobre este objetivo, ou sobre alguma tarefa, você pode escolher</Text>
+            <ModalContent bg="black.100" w={["95%","95%","100%"]}>
+                <ModalHeader >
+                    <Text color="whitesmoke" fontSize={["1.15rem","1.15rem","1.5rem"]}>Realize anotações sobre este objetivo, ou sobre alguma tarefa, você pode escolher</Text>
                     <Text fontSize="12"color="#949393">vamos construir seus sonhos!!</Text>
                 </ModalHeader>
-                <ModalCloseButton onClick={handleOpenAnotacao} />
+                <ModalCloseButton onClick={handleOpenAnotacao} color="white"/>
                 <ModalBody maxH="50rem" overflowY="auto">
                     <FormControl  isRequired>
-                        <FormLabel>Titulo:</FormLabel>
+                        <FormLabel color="whitesmoke" fontSize={["0.9rem","0.95rem","1rem"]}>Titulo:</FormLabel>
                         <Input 
                         value={titulo}
+                        color="white"
                         onChange={(e) => setTitulo(e.target.value)}
                          placeholder='Insira o titulo da anotação' 
+                         _placeholder={{color:'gray.200'}}
+                         fontSize={["0.9rem","0.95rem","1rem"]}
                          required/>
 
-                        <FormLabel mt="4">Campo disponível para qualquer anotação:</FormLabel>
-                        <Flex w="100%">
+                        <FormLabel mt="4" color="whitesmoke" fontSize={["0.9rem","0.95rem","1rem"]}>Campo disponível para qualquer anotação:</FormLabel>
+                        <Flex w="100%" color="white">
                             <ReactQuill theme="snow" value={descricao} onChange={setDescricao} style={{width:'100%'}}/>
                         </Flex>
-                        <Flex w="100%" mt="14">
+                        <Flex w="100%" mt={["20","20","14"]}>
                             <Button w="100%" size="md" onClick={handleSubmitAnotacao} type="button" bg="blue.100" color="white" _hover={{
                                 opacity: 0.8
                             }}>Salvar</Button>

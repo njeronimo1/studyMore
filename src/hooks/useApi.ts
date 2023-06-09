@@ -5,25 +5,26 @@ export const api = axios.create({
 })
 
 export const useApi = () => ({
-    signin: async (email:string, password:string) => {
+    signin: async (email:string) => {
 
-        const usuario = localStorage.getItem('db-users');
+        const usuario = localStorage.getItem('usuario');
 
         if(usuario){
 
-            let user = JSON.parse(usuario);
-            // console.log(user);
+            let usuario_ = JSON.parse(usuario);
+            // console.log(email, password, "Email e senha");
+            // console.log(usuario_);
 
-            if(email === user.email && password === user.password){
+            if(email === usuario_.email){
                 return {
-                    user: {id: 1, name:user.name, email:user.email},
-                    token: '123456789'
+                    user: {id: usuario_.id, name:usuario_.name, email:usuario_.email},
+                    token: usuario_.id
                 }
             }
             
         }else{
             return{
-                user: {id: 0, name:'', email:''},
+                user: {id: '0', name:'', email:''},
                 token: ''
             }
         }

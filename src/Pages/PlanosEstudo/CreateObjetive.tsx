@@ -17,6 +17,7 @@ import 'react-quill/dist/quill.snow.css';
 import { addDoc, collection, doc, getFirestore, updateDoc } from "firebase/firestore";
 import { app } from "../../services/firebaseAuth";
 import { ObjetivoContext } from '../../contexts/Objetivos/ObjetivoContext';
+import { AuthContext } from '../../contexts/Auth/AuthContext';
 
 interface CreateObjetiveProps{
     isOpenModal: boolean
@@ -36,6 +37,7 @@ export function CreateObjetive({isOpenModal, handleOpenModal, planoEstudoId, obj
     const[loading, setLoading] = useState(false);
     const toast = useToast();
     const objetivoContext = useContext(ObjetivoContext);
+    const auth = useContext(AuthContext);
 
     const db = getFirestore(app);
     const objetivoCollectionRef = collection(db, "objetivo");
@@ -44,16 +46,21 @@ export function CreateObjetive({isOpenModal, handleOpenModal, planoEstudoId, obj
         e.preventDefault();
         if(titulo !== '' && texto_chave !== '' && descricao !== ''
             && dataInicio !== '' && dataFim !== ''){
+
             setLoading(true);
         
             if(objetivoId == undefined || objetivoId == ""){
+                var usuarioId = auth?.user.id;
+                var statusObjetivo = 'Aberto';
                 const createObjetivo = await addDoc(objetivoCollectionRef, {
                     titulo,
                     texto_chave,
                     descricao,
                     dataInicio,
                     dataFim,
-                    planoEstudoId
+                    planoEstudoId,
+                    statusObjetivo,
+                    usuarioId
                 });
             
                 const reset = await objetivoContext.getObjetivo();
@@ -110,63 +117,83 @@ export function CreateObjetive({isOpenModal, handleOpenModal, planoEstudoId, obj
             setDataInicio('');
             setDataFim('');
         }
-    }, [objetivoId]);
+    }, [isOpenModal]);
 
     return(
         <>
         <Modal onClose={() => {}} isOpen={isOpenModal} isCentered size="5xl">
         <ModalOverlay />
-            <ModalContent>
+            <ModalContent bg="black.100" w={["95%","95%", "100%"]}>
                 <ModalHeader>
-                    <Text>Cadastre um objetivo que você deseja cumprir neste plano de estudos 📌</Text>
+                    <Text color="whitesmoke" fontSize={["1.15rem","1.15rem","1.5rem"]}>Cadastre um objetivo que você deseja cumprir neste plano de estudos 📌</Text>
                     <Text fontSize="12"color="#949393">vamos construir seus sonhos!!</Text>
                 </ModalHeader>
-                <ModalCloseButton onClick={handleOpenModal} />
-                <ModalBody maxH="50rem" overflowY="auto">
+                <ModalCloseButton onClick={handleOpenModal} color="white"/>
+                <ModalBody maxH={["35rem","35rem","50rem"]} overflowY="auto">
                     <FormControl  isRequired>
-                        <FormLabel>Titulo:</FormLabel>
+                        <FormLabel color="whitesmoke" fontSize={["0.9rem","0.95rem","1rem"]}>Titulo:</FormLabel>
                         <Input 
                         value={titulo}
                         onChange={(e) => setTitulo(e.target.value)}
                          placeholder='Insira o nome do plano de estudo' 
-                         required/>
+                         fontSize={["0.9rem","0.95rem","1rem"]}
+                         required
+                         bg="black.200"
+                         color="white"
+                         _placeholder={{color:'gray.200'}}
+                         border="none" />
 
-                        <FormLabel mt="4">Qual a principal intenção deste objetivo?</FormLabel>
+                        <FormLabel mt="4" color="whitesmoke" fontSize={["0.9rem","0.95rem","1rem"]}>Qual a principal intenção deste objetivo?</FormLabel>
                         <Input 
                         value={texto_chave}
                         onChange={(e) => setTextoChave(e.target.value)}
                         placeholder='Resuma o por quê você tem que cumprir este objetivo' 
-                        required/>
+                        fontSize={["0.9rem","0.95rem","1rem"]}
+                        required
+                        color="white"
+                        bg="black.200"
+                         _placeholder={{color:'gray.200'}}
+                         border="none"/>
 
-                        <FormLabel mt="4">Preencha a data de inicio e data que pretender terminar este objetivo:</FormLabel>
+                        <FormLabel mt="4" color="whitesmoke" fontSize={["0.9rem","0.95rem","1rem"]}>Preencha a data de inicio e data que pretender terminar este objetivo:</FormLabel>
                         <Flex gap={2}>
                             <Box w="50%">
-                                <Text fontSize="12" color="gray.300">Inicio</Text>
+                                <Text fontSize="12" color="whitesmoke">Inicio</Text>
                                 <Input
                                     value={dataInicio}
                                     onChange={(e) => setDataInicio(e.target.value)}
                                     placeholder="Inicio"
+                                    color="white"
+                                    fontSize={["0.9rem","0.95rem","1rem"]}
                                     size="md"
                                     type="datetime-local"
-                                    />
+                                    bg="black.200"
+                         _placeholder={{color:'gray.200'}}
+                         border="none"/>
+
                             </Box>
                             <Box w="50%">
-                            <Text fontSize="12" color="gray.300">Fim</Text>
+                            <Text fontSize="12" color="whitesmoke">Fim</Text>
                             <Input
                             value={dataFim}
                             onChange={(e) => setDataFim(e.target.value)}
                                 placeholder="Fim"
+                                color="white"
+                                fontSize={["0.9rem","0.95rem","1rem"]}
                                 size="md"
                                 type="datetime-local"
-                                />
+                                bg="black.200"
+                         _placeholder={{color:'gray.200'}}
+                         border="none"/>
+
                             </Box>
                         </Flex>
 
-                        <FormLabel mt="4">Agora você pode usar sua imaginação para descrever em texto, tópicos, blocos, as etapas ou o que desejar, sobre seu novo objetivo:</FormLabel>
-                        <Flex w="100%">
-                            <ReactQuill theme="snow" value={descricao} onChange={setDescricao} style={{width:'100%'}}/>
+                        <FormLabel mt="4" color="whitesmoke" fontSize={["0.9rem","0.95rem","1rem"]}>Agora você pode usar sua imaginação para descrever em texto, tópicos, blocos, as etapas ou o que desejar, sobre seu novo objetivo:</FormLabel>
+                        <Flex w="100%"  color="white" maxH="12rem" height="12rem">
+                            <ReactQuill theme="snow" value={descricao} onChange={setDescricao} style={{width:'100%', color:'white'}}/>
                         </Flex>
-                        <Flex w="100%" mt="14">
+                        <Flex w="100%" mt={["20", "20","14"]}>
                             {loading == false && (
                                 <Button w="100%" size="md" onClick={handleSubmitObjetive} type="button" bg="blue.100" color="white" _hover={{
                                     opacity: 0.8

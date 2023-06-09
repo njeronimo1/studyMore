@@ -5,5 +5,10 @@ export interface ObjetivoProps{
     texto_chave: string,
     descricao: string,
     dataInicio: string,
-    dataFim: string
+    dataFim: string,
+    statusObjetivo?: string
+}
+
+export interface ObjetivoPropsPaginationProps{
+    ObjetivoArray: ObjetivoProps[];
 }

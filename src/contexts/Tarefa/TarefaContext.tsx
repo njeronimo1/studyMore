@@ -4,10 +4,10 @@ import { TarefaProps } from "../../@types/tarefa";
 
 interface TarefaContextProps{
     tarefa: TarefaProps[],
-    getTarefas: () => Promise<boolean>,
-    handleEditTarefa: (id: string, isComplete: boolean) => Promise<boolean>,
+    getTarefas: () => Promise<TarefaProps[]>,
+    handleEditTarefa: (id: string, isComplete: boolean, objetivoId: string) => Promise<TarefaProps[]>,
     handleDeleteTarefa: (id: string) => Promise<boolean>,
-    handleCreateTarefa: (title: string, objetivoId: string) => Promise<boolean>,
+    handleCreateTarefa: (title: string, objetivoId: string) => Promise<TarefaProps[]>,
 }
 
 export const TarefaContext = createContext<TarefaContextProps>(null!);

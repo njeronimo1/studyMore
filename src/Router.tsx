@@ -17,11 +17,11 @@ export function Router(){
                 <Routes>
                     <Route path="/" element={<Login />}></Route>
                     <Route path="/cadastrar" element={<Cadastrar />}></Route>
-                    <Route path="/home" element={ <Home /> }></Route>
-                    <Route path="/usuario" element={<Usuario />}></Route>
-                    <Route path="/planos-estudo" element={<PlanosEstudo />}></Route>
-                    <Route path="/planos-estudo/:id" element={<DetailPlanoEstudo />}></Route>
-                    <Route path="/objetivo/:id" element={<DetailObjetivo />}></Route>
+                    <Route path="/home" element={ <RequireAuth><Home /></RequireAuth> }></Route>
+                    {/* <Route path="/usuario" element={<Usuario />}></Route> */}
+                    <Route path="/planos-estudo" element={<RequireAuth><PlanosEstudo /></RequireAuth>}></Route>
+                    <Route path="/planos-estudo/:id" element={<RequireAuth><DetailPlanoEstudo /></RequireAuth>}></Route>
+                    <Route path="/objetivo/:id" element={<RequireAuth><DetailObjetivo /></RequireAuth>}></Route>
                 </Routes>
             </BrowserRouter>
         </>

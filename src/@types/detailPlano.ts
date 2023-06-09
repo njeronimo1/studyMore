@@ -8,3 +8,9 @@ export interface detailPlanoGrafic{
     titulo: string,
     value: number
 }
+
+export interface detailPlanoObjetivo{
+    porcentagemConclusaoPlano: number,
+    totalObjetivo: number,
+    totalObjetivoConcluido: number,
+}

@@ -1,14 +1,15 @@
 import { createContext } from "react";
-import { PlanosEstudoProps } from "../../@types/planosEstudo";
+import { PlanosEstudoPaginationProps, PlanosEstudoProps } from "../../@types/planosEstudo";
 
 interface PlanosEstudoContextProps{
     planosEstudo: PlanosEstudoProps[],
     planosEstudoActive: PlanosEstudoProps[],
     planosEstudoDetail: PlanosEstudoProps[],
-    getUser: () => Promise<boolean>,
+    getPlanoEstudo: () => Promise<PlanosEstudoProps[]>,
+    getPlanoEstudoPagination: () => Promise<PlanosEstudoPaginationProps[]>,
     handleDeletePlano: (id: string) => Promise<void>,
     handleEditPlano: (id: string) => Promise<void>,
-    searchPlanoForId: (id: string) => void
+    searchPlanoForId: (id: string) => Promise<PlanosEstudoProps[]>
     resetPlanoActive: () => void,
 }
 

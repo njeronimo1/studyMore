@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { PlanosEstudoProps } from "../../@types/planosEstudo";
 import { TarefaProps } from "../../@types/tarefa";
@@ -12,7 +12,12 @@ export function TarefaProvider({children}: {children: JSX.Element}){
     
 
     const db = getFirestore(app);
-    const tarefaCollectionRef = collection(db, "tarefa");
+    const tarefaCollectionRefCreate = collection(db, "tarefa");
+
+    var usuario:any = localStorage.getItem('usuario');
+    if(usuario) usuario = JSON.parse(usuario);
+
+    const tarefaCollectionRef = query(collection(db, "tarefa"), where("usuarioId", "==", usuario ? usuario.uid ? usuario.uid : usuario.id : ""))
 
     useEffect(() => {
         getTarefas();
@@ -37,19 +42,22 @@ export function TarefaProvider({children}: {children: JSX.Element}){
 
         setTarefa(arrayTarefa);
 
-        
-
-        return true;
+        return arrayTarefa;
     }
 
-    async function handleEditTarefa(id: string, isComplete: boolean){
+    async function handleEditTarefa(id: string, isComplete: boolean, objetivoId: string){
         const tarefaDoc = doc(db, "tarefa", id);
         const newFields = {isComplete: isComplete};
         await updateDoc(tarefaDoc, newFields);
         
-        getTarefas();
+        const tarefas = await getTarefas().then((data) => {
+            
+            const filterTarefa = data.filter(t => t.objetivoId == objetivoId);
+            return filterTarefa;
 
-        return true;
+        });
+
+        return tarefas;
     }
 
     async function handleDeleteTarefa(id: string){
@@ -61,14 +69,21 @@ export function TarefaProvider({children}: {children: JSX.Element}){
     }
 
     async function handleCreateTarefa(title: string, objetivoId: string){
-        const createPlanoEstudo = await addDoc(tarefaCollectionRef, {
+        const createPlanoEstudo = await addDoc(tarefaCollectionRefCreate, {
             titulo: title,
             isComplete: false,
-            objetivoId: objetivoId
+            objetivoId: objetivoId,
+            usuarioId: usuario ? usuario.uid ? usuario.uid : usuario.id : ""
         });
-        getTarefas();
         
-        return true;
+        const tarefas = await getTarefas().then((data) => {
+            
+            const filterTarefa = data.filter(t => t.objetivoId == objetivoId);
+            return filterTarefa;
+
+        });
+
+        return tarefas;
     }
 
     return(

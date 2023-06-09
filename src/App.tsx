@@ -7,6 +7,7 @@ import { PlanosEstudoProvider } from "./contexts/PlanosEstudo/PlanosEstudoProvid
 import { ObjetivoProvider } from "./contexts/Objetivos/ObjetivoProvider";
 import { TarefaProvider } from "./contexts/Tarefa/TarefaProvider";
 import { AnotacaoProvider } from "./contexts/Anotacao/AnotacaoProvider";
+import "./style-global.css";
 
 export function App() {
   return (

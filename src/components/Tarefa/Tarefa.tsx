@@ -11,6 +11,8 @@ import { BsCheck } from "react-icons/bs";
 import { TarefaProps } from "../../@types/tarefa";
 import { TarefaContext } from "../../contexts/Tarefa/TarefaContext";
 import { app } from "../../services/firebaseAuth";
+import { ObjetivoContext } from "../../contexts/Objetivos/ObjetivoContext";
+import { PlanosEstudoContext } from "../../contexts/PlanosEstudo/PlanosEstudoContext";
 
 export function Tarefa({objetivoId} : Tarefa_Props){
     const[onCreateTarefa, setOnCreateTarefa] = useState(false);
@@ -22,6 +24,8 @@ export function Tarefa({objetivoId} : Tarefa_Props){
     
 
     const tarefaContext = useContext(TarefaContext);
+    const objetivoContext = useContext(ObjetivoContext);
+    const planoContext = useContext(PlanosEstudoContext);
 
     useEffect(() => {
         
@@ -46,24 +50,85 @@ export function Tarefa({objetivoId} : Tarefa_Props){
 
     async function handleCompleteTarefa(id: string, checked: boolean){
         setLoadingComplete(true);
-        const editTarefa = await tarefaContext.handleEditTarefa(id, checked);
-        
-        if(editTarefa){
-            setLoadingComplete(false);
-        }else{
+
+        await tarefaContext.handleEditTarefa(id, checked, objetivoId).then((tarefas) => {
+            // console.log(tarefas);            
+            objetivoContext.editObjetivo(objetivoId, tarefas).then((result) => {
+                if(result !== "false"){
+                    // var objetivoId 
+                    objetivoContext.updateStatusPlano(result);
+                    setLoadingComplete(false);
+                }else{
+                    toast({
+                        title: 'Não foi retornado nenhum status para o objetivo',
+                        status: 'error',
+                        isClosable: true,
+                      })
+                    setLoadingComplete(false);
+                }
+            }).catch((err) => {
+            console.log(err);
+
             toast({
-                title: 'Falha ao atualizar',
+                title: 'Falha ao atualizar objetivo',
                 status: 'error',
                 isClosable: true,
               })
+            setLoadingComplete(false);}
+            );
+
+        }).catch((err) => {
+            console.log(err);
+
+            toast({
+                title: 'Falha ao atualizar tarefa',
+                status: 'error',
+                isClosable: true,
+              })
+
             setLoadingComplete(false);
-        }
+        })
         
     }
 
     async function handleCreateTarefa(){
         if(titulo !== '' && titulo.length >= 5){
-            const create = await tarefaContext.handleCreateTarefa(titulo, objetivoId);
+            await tarefaContext.handleCreateTarefa(titulo, objetivoId).then((tarefas) => {
+                // console.log(tarefas);            
+                objetivoContext.editObjetivo(objetivoId, tarefas).then((result) => {
+                    if(result !== "false"){
+                        objetivoContext.updateStatusPlano(result);
+                        setLoadingComplete(false);
+                    }else{
+                        toast({
+                            title: 'Não foi retornado nenhum status para o objetivo',
+                            status: 'error',
+                            isClosable: true,
+                          })
+                        setLoadingComplete(false);
+                    }
+                }).catch((err) => {
+                console.log(err);
+    
+                toast({
+                    title: 'Falha ao atualizar objetivo',
+                    status: 'error',
+                    isClosable: true,
+                  })
+                setLoadingComplete(false);}
+                );
+    
+            }).catch((err) => {
+                console.log(err);
+    
+                toast({
+                    title: 'Falha ao criar tarefa',
+                    status: 'error',
+                    isClosable: true,
+                  })
+    
+                setLoadingComplete(false);
+            });
 
             setLoadingComplete(true);
         }else{
@@ -97,8 +162,6 @@ export function Tarefa({objetivoId} : Tarefa_Props){
     return(
         <>
             
-                
-            
             <Flex w="100%" justifyContent="space-between" position="relative">
                 <Flex direction="column" w="60%" gap="1">
                     <Text color="white" fontSize="15" fontWeight="600">Progresso: {progress > 0 ? progress : 0}%</Text>
@@ -115,7 +178,7 @@ export function Tarefa({objetivoId} : Tarefa_Props){
 
                 {onCreateTarefa && (
                     <Flex bg="#3D3D3D" w="100%" borderRadius="12px" p="6">
-                        <Flex w="100%"> 
+                        <Flex w="100%" gap={["1","1",""]}> 
                             <Flex w="10%" alignItems="center" justifyContent="flex-start">
                                 <Checkbox size="lg" disabled />
                             </Flex>

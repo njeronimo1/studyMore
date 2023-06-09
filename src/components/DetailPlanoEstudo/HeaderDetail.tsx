@@ -1,7 +1,12 @@
-import { Box, Flex, Progress,Text } from "@chakra-ui/react";
+import { Box, Flex, Progress,Text, useMenuContext } from "@chakra-ui/react";
 import { theme } from "../../theme";
 import Chart from 'react-apexcharts';
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { detailPlanoObjetivo } from "../../@types/detailPlano";
+import { ObjetivoContext } from "../../contexts/Objetivos/ObjetivoContext";
+import { TarefaContext } from "../../contexts/Tarefa/TarefaContext";
+import { PlanosEstudoContext } from "../../contexts/PlanosEstudo/PlanosEstudoContext";
+import { ObjetivoProps } from "../../@types/objetivo";
 
 const options: any = {
     chart:{
@@ -12,68 +17,141 @@ const options: any = {
         foreColor:  theme.colors.gray[500],
     },
     plotOptions:{
-        pie: {
-            startAngle: -90,
-            endAngle: 90,
-            offsetY: 10
-          }
+        bar:{
+            horizontal: false
+        }
     },
     dataLabels:{
         enabled: true,
     },
     tooltip:{
-            enabled:false
+        enabled:false
     },
     grid: {
-        padding: {
-            bottom: -80
-          }
+        show:false,
     },
+    labels: ['Abertos', 'Em andamento', 'Concluídos'],
+    colors: ['#075fe4','#072655', '#88b4ff'],
+    
     xaxis:{
+        // type: 'datetime',
         axisBorder:{
             color:theme.colors.gray[600],
         },
         axisTicks:{
-            color:theme.colors.gray[600],
+            color:'white',
         },
         categories: ['Abertos', 'Em andamento', 'Concluídos'],
     },
+    yaxis:{
+        show:false
+    },
     fill:{
-        colors: ['#0c105a', '#a9bf9a', '#c09f7f'],
+        // opacity: 0.3,
+        // type: 'gradient',
+        colors: ['#075fe4','#072655', '#88b4ff'],
+        // gradient: {
+        //     shade:'dark',
+        //     opacityFrom: 0.7,
+        //     opacityTo: 0.3
+        // }
     }
 }
 
-const series = [44, 55]
+const series = [
+    { data: [400, 430, 448]},
+]
 
-export function HeaderDetail(){
+interface HeaderDetailProps{
+    planoEstudoId: string
+}
 
+export function HeaderDetail({planoEstudoId}: HeaderDetailProps){
+
+    const objetivos = useContext(ObjetivoContext);
+    const tarefas = useContext(TarefaContext);
+    const [dadosObjetivo, setDadosObjetivo] = useState([]);
+    const [totalObjetivosEmAndamento, setTotalObjetivosEmAndamento]= useState(0);
+
+    const [detailPlanoObjetivo, setDetailPlanoObjetivo] = useState<detailPlanoObjetivo[]>([]);
+    const [objetivosArray, setObjetivosArray] = useState<ObjetivoProps[]>([])
+    const [loadingDados, setLoadingDados] = useState(true);
+
+    
     useEffect(() => {
-        
-    }, []);
+        ///Calculo de total de objetivos
 
-    return(
-        <>
-            <Flex mt="5" w="100%" bg="white" borderRadius="6" p="4" gap="6">
-                <Box w="60%" >
-                    <Text fontSize="17" fontWeight="600">Porcentagem de conclusão de seu plano de estudo: 20%</Text>
-                    <Box mt="4">
-                        <Progress mt="1" value={20} size='lg' colorScheme='blue' />
+        searchDetail(planoEstudoId).then((res) => {
+            //Fazer uma logica pra buscar as tarefas antes de continuar, pois está vindo vazio, o restante está funcionando.
+
+            if(res){
+                const objetivosTotal = res.filter(objt => objt.planoEstudoId == planoEstudoId);
+                const totalObjetivosCadastrados = res.filter(objt => objt.planoEstudoId == planoEstudoId).length;
+
+                searchTarefas().then((resTarefa) => {
+                    var totalObjetivosConcluidos = objetivosTotal.filter(obj => obj.statusObjetivo === "Concluido").length;
+            
+                    const porcentagemConclusao = Number(((totalObjetivosConcluidos / totalObjetivosCadastrados) * 100).toFixed(0));
+                    
+                    setDetailPlanoObjetivo([{
+                        porcentagemConclusaoPlano: porcentagemConclusao? porcentagemConclusao : 0,
+                        totalObjetivo: totalObjetivosCadastrados,
+                        totalObjetivoConcluido: totalObjetivosConcluidos,
+                    }]);
+            
+                    //calculo dos dados do grafico
+            
+                    var totalObjetivosEmAndamento_ = objetivosTotal.filter(obj => obj.statusObjetivo == "Em andamento").length;
+                    var totalObjetivosEmAberto = objetivosTotal.filter(obj => obj.statusObjetivo === "Aberto").length;
+                    setDadosObjetivo([{data: [totalObjetivosEmAberto, totalObjetivosEmAndamento_, totalObjetivosConcluidos]}]);
+                    setLoadingDados(false);
+                })
+            }
+        });
+        
+    }, [planoEstudoId]);
+
+    async function searchDetail(id_: string){
+        var search_ = await objetivos.searchObjetivoForId(id_);
+        setObjetivosArray(search_);
+        
+        return search_;
+    }
+
+    async function searchTarefas(){
+        var searchTarefas = await tarefas.getTarefas();
+
+        return searchTarefas;
+    }
+
+        return(
+            <>
+            {loadingDados == false && (
+                <Flex mt="5" w="100%" bg="black.100" borderRadius="6" p="4" gap="6" direction={["column", "column","initial"]}>
+                    <Box w={["100%","100%","60%" ]}>
+                        <Text fontSize="17" color="white" fontWeight="600">Porcentagem de conclusão de seu plano de estudo: {detailPlanoObjetivo[0]?.porcentagemConclusaoPlano.toFixed(0)}%</Text>
+                        <Box mt="4">
+                            <Progress mt="1" value={Number(detailPlanoObjetivo[0]?.porcentagemConclusaoPlano.toFixed(0))} size='lg' colorScheme='blue' />
+                        </Box>
+                        
+                        {/* implementar filtros */}
+                        <Box textAlign="left" mt="10">
+                        </Box>
+                        <Box textAlign="left">
+                        </Box>
+
                     </Box>
-                    <Box textAlign="left" mt="3">
-                        <Text fontSize="16" color="gray.300" fontWeight="400" display="flex" alignItems="center" gap="2">Total de objetivos cadastrados: 
-                        <Text fontSize="17" color="blue.principal" fontWeight="600">12</Text></Text>
+                    <Box w={["100%","100%","40%" ]}>
+                        <Text fontSize="17" textAlign="center" color="whitesmoke" fontWeight="600">Relação entre objetivos abertos, concluídos e em andamento</Text>
+                            <Chart options={options} series={dadosObjetivo} type="bar" height={150}/>
+                        {/* <p>{dadosObjetivo[0].length}</p> */}
                         
                     </Box>
-                    <Box textAlign="left">
-                        <Text fontSize="16" fontWeight="400" color="gray.300" display="flex" alignItems="center" gap="2">Total de objetivos concluídos: 
-                        <Text fontSize="17" color="blue.principal" fontWeight="600">3</Text></Text>
-                    </Box>
-                </Box>
-                <Box w="40%">
-                    <Text fontSize="17" textAlign="center" fontWeight="600">Relação entre objetivos abertos, concluídos e em andamento</Text>
-                    <Chart options={options} series={series} type="donut" height={150}/>
-                </Box>
-            </Flex>
-        </>
-    )
+                </Flex>
+            )}
+
+                
+            </>
+        )
+    
 }

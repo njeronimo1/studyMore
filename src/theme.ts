@@ -9,10 +9,10 @@ export const theme = extendTheme({
             "600": "#4B4D63",
             "500": "#616480",
             "400": "#797D9A",
-            "300": "#9699B0",
+            "300": "#3d3d3d",
             "200": "#b9babf",
-            "100": "#d4d5d9",
-            "fundo": "#f6f8fa",
+            "100": "#2F2E2E",
+            "fundo": "#222222",
         },
         green:{
             "paleta":"#a9bf9a"
@@ -22,17 +22,21 @@ export const theme = extendTheme({
             "principal": "#0c105a",
         },
         black:{
-            "title": "#060d18"
+            "title": "#060d18",
+            "300":"#f3f2ef",
+            "200":"#222222",
+            "100":"#2F2E2E",
+            "50":"#1C1C1C"
         }
     },
     fonts:{
-        heading: 'Lato',
-        body: 'Lato'
+        heading: 'Inter',
+        body: 'Inter'
     },
     styles: {
         global: {
             body: {
-                bg: 'gray.fundo',
+                bg: 'black.200',
                 color: ''
             }
         }
