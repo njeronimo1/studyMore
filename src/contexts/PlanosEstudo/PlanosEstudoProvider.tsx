@@ -13,24 +13,27 @@ export function PlanosEstudoProvider({children}: {children: JSX.Element}){
     const [planosEstudoActive, setPlanosEstudoActive] = useState<PlanosEstudoProps[]>([]);
     const [planosEstudoDetail, setPlanosEstudoDetail] = useState<PlanosEstudoProps[]>([]);
     const objetivoContext = useContext(ObjetivoContext);
+    const [loading, setLoading] = useState(true);
+    const auth = useContext(AuthContext);
 
     const db = getFirestore(app);
-    var usuario:any = localStorage.getItem('usuario');
-    if(usuario) usuario = JSON.parse(usuario);
+    var usuario:any = auth.user;
     
     const planoEstudoCollectionRef = query(collection(db, "planos-estudo"), where("usuarioId", "==", usuario ? usuario.uid ? usuario.uid : usuario.id : ""), orderBy("date_create", "desc"));
-
+    
     useEffect(() => {
         
         getPlanoEstudo();
         getPlanoEstudoPagination();
+        
     }, []);
 
     async function getPlanoEstudo(){
         
+        // console.log(planoEstudoCollectionRef);
         const data = (await getDocs(planoEstudoCollectionRef));
         const array: any = [data.docs.map((doc) => ({...doc.data(), id:doc.id }))];
-        
+        // console.log(array);
         const arrayPlanoEstudo: PlanosEstudoProps[] = [];
         array[0].forEach(doc_ => {
             var objetoPlanoEstudo = {
@@ -46,6 +49,7 @@ export function PlanosEstudoProvider({children}: {children: JSX.Element}){
         })
 
         setPlanosEstudo(arrayPlanoEstudo);
+        setLoading(false);
 
         return arrayPlanoEstudo;
     } 
@@ -122,7 +126,7 @@ export function PlanosEstudoProvider({children}: {children: JSX.Element}){
     return(
         <>
             <PlanosEstudoContext.Provider value={{planosEstudo, planosEstudoActive, getPlanoEstudo, handleDeletePlano, handleEditPlano, searchPlanoForId, resetPlanoActive, planosEstudoDetail
-            ,getPlanoEstudoPagination}}>
+            ,getPlanoEstudoPagination, loading}}>
                 { children }
             </PlanosEstudoContext.Provider>
         </>

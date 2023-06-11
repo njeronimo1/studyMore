@@ -8,6 +8,7 @@ export type AuthContextType = {
     signup: (name: string, email: string, password: string) => Promise<boolean>,
     setUserLocalStorage: (userLocal: User) => Promise<boolean>,
     getUser: () => Promise<User | null>,
+    setarUsuario: (usuario: User) => void,
 }
 
 

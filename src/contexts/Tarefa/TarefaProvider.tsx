@@ -1,21 +1,23 @@
 import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { PlanosEstudoProps } from "../../@types/planosEstudo";
 import { TarefaProps } from "../../@types/tarefa";
 import { app } from "../../services/firebaseAuth";
 import { TarefaContext } from "./TarefaContext";
+import { AuthContext } from "../Auth/AuthContext";
 
 
 export function TarefaProvider({children}: {children: JSX.Element}){
 
     const [tarefa, setTarefa] = useState<TarefaProps[]>([]);
+    const auth = useContext(AuthContext);
     
 
     const db = getFirestore(app);
     const tarefaCollectionRefCreate = collection(db, "tarefa");
 
-    var usuario:any = localStorage.getItem('usuario');
-    if(usuario) usuario = JSON.parse(usuario);
+    // var usuario:any = localStorage.getItem('usuario');
+    var usuario:any = auth.user;
 
     const tarefaCollectionRef = query(collection(db, "tarefa"), where("usuarioId", "==", usuario ? usuario.uid ? usuario.uid : usuario.id : ""))
 

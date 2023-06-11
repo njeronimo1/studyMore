@@ -1,19 +1,21 @@
 import { collection, deleteDoc, doc, getDocs, updateDoc, getFirestore, query, where, orderBy } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ObjetivoProps, ObjetivoPropsPaginationProps } from "../../@types/objetivo";
 import { app } from "../../services/firebaseAuth";
 import { ObjetivoContext } from "./ObjetivoContext";
 import { TarefaProps } from "../../@types/tarefa";
+import { AuthContext } from "../Auth/AuthContext";
 
 export function ObjetivoProvider({children}: {children: JSX.Element}){
 
     const[objetivo, setObjetivo] = useState<ObjetivoProps[]>([]);
+    const auth = useContext(AuthContext);
 
     const db = getFirestore(app);
     // const objetivoCollectionRef = collection(db, "objetivo");
 
-    var usuario:any = localStorage.getItem('usuario');
-    if(usuario) usuario = JSON.parse(usuario);
+    // var usuario:any = localStorage.getItem('usuario');
+    var usuario:any = auth.user;
 
     const objetivoCollectionRef = query(collection(db, "objetivo"), where("usuarioId", "==", usuario ? usuario.uid ? usuario.uid : usuario.id : ""), orderBy("dataInicio"))
 

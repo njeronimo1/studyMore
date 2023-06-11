@@ -24,6 +24,7 @@ import { Link } from "react-router-dom";
 import {BsCheck} from 'react-icons/bs';
 import {IoClose} from 'react-icons/io5';
 import { Footer } from "../../components/Footer/Footer";
+import { AuthContextGoogle } from "../../contexts/AuthGoogle/AuthGoogle";
 
 
 const options: any = {
@@ -159,6 +160,7 @@ export function Home(){
 
     //contextos
     const auth = useContext(AuthContext);
+    const authGoogle = useContext(AuthContextGoogle);
     const planoEstudoContext = useContext(PlanosEstudoContext);
     const tarefasContext = useContext(TarefaContext);
     const objetivoContext = useContext(ObjetivoContext);
@@ -191,40 +193,34 @@ export function Home(){
             }else if(titleGoogle !== undefined){
                 setTitle('Olá 👋 ' + titleGoogle.displayName);
             }
+
+            filterObjetivoPorPlano('').then((result) => {
+                planoEstudoContext.getPlanoEstudo().then((data) => { 
+                    console.log(data);
+                    setPlanoEstudo(data);
+    
+                    tarefasContext.getTarefas().then((dataTarefa) => {
+                        objetivoContext.getObjetivo().then((obj) => {
+                            setInfoTotais({
+                                totalPlanoEstudos: data.length,
+                                totalTarefas: dataTarefa.length,
+                                totalObjetivo: obj.length,
+                            })
+                        })
+                    });
+        
+                    const planosNaoIniciados = data.filter(p => p.statusPlano == undefined).length;
+                    const planosAbertos = data.filter(p => p.statusPlano == "Aberto").length;
+                    const planosAndamento = data.filter(p => p.statusPlano == "Em andamento").length;
+                    const planosConcluido = data.filter(p => p.statusPlano == "Concluido").length;
+        
+                    setDadosPlanoPorStatus([{data: [planosNaoIniciados,planosAbertos, planosAndamento, planosConcluido]}])
+        
+                });
+            });
         })
         
-
-        
     }, [auth.user]);
-
-    useEffect(() => {
-        
-        filterObjetivoPorPlano('').then((result) => {
-            planoEstudoContext.getPlanoEstudo().then((data) => { 
-                
-                setPlanoEstudo(data);
-
-                tarefasContext.getTarefas().then((dataTarefa) => {
-                    objetivoContext.getObjetivo().then((obj) => {
-                        setInfoTotais({
-                            totalPlanoEstudos: data.length,
-                            totalTarefas: dataTarefa.length,
-                            totalObjetivo: obj.length,
-                        })
-                    })
-                });
-    
-                const planosNaoIniciados = data.filter(p => p.statusPlano == undefined).length;
-                const planosAbertos = data.filter(p => p.statusPlano == "Aberto").length;
-                const planosAndamento = data.filter(p => p.statusPlano == "Em andamento").length;
-                const planosConcluido = data.filter(p => p.statusPlano == "Concluido").length;
-    
-                setDadosPlanoPorStatus([{data: [planosNaoIniciados,planosAbertos, planosAndamento, planosConcluido]}])
-    
-            });
-        });
-
-    }, []);
 
     async function filterObjetivoPorPlano(planoId: string){
 

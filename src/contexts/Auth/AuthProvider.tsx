@@ -9,6 +9,10 @@ export function AuthProvider({children}: {children: JSX.Element}){
     const [user, setUser] = useState<User | null>(null);
     const api = useApi();
 
+    function setarUsuario(usuario: User){
+        setUser(usuario)
+    }
+
     useEffect(() =>{
         const usuario = localStorage.getItem('usuario');
         if(usuario){
@@ -58,8 +62,8 @@ export function AuthProvider({children}: {children: JSX.Element}){
     }
 
     async function signout(){
-        localStorage.setItem('usuario', '');
-        localStorage.setItem('authToken', '');
+        localStorage.removeItem('usuario');
+        localStorage.removeItem('authToken');
         setUser(null);
     }
 
@@ -73,14 +77,14 @@ export function AuthProvider({children}: {children: JSX.Element}){
     }
 
     async function setUserLocalStorage(userLocal: User){
-        await setUser(userLocal);
-        await localStorage.setItem('usuario', JSON.stringify(userLocal));
+        setUser(userLocal);
+        localStorage.setItem('usuario', JSON.stringify(userLocal));
 
         return true;
     }
 
     return(
-        <AuthContext.Provider value={{user, signin, signout, signup, setUserLocalStorage, getUser}}>
+        <AuthContext.Provider value={{user, signin, signout, signup, setUserLocalStorage, getUser, setarUsuario}}>
             { children }
         </AuthContext.Provider>
     )
