@@ -146,7 +146,7 @@ export function PlanosEstudo(){
                             </InputGroup>
                         </Box>
                         <Flex w={["0%","0%","50%"]} alignItems="flex-end" justifyContent="flex-end">
-                            <Button display="flex" gap={["1","1","3"]} position={["fixed","fixed","initial"]} bottom={["0.7rem","0.55rem",""]} right={["0.5rem","0.5rem",""]} fontSize={["13","13","1rem"]} bg="blue.100" color="white" transition="0.2s ease" _hover={{bg:'white', color:'blue.100'}} onClick={() => setIsOpenModal(true)}>
+                            <Button display="flex" gap={["1","1","3"]} position={["fixed","fixed","initial"]} zIndex="1" bottom={["0.7rem","0.55rem",""]} right={["0.5rem","0.5rem",""]} fontSize={["13","13","1rem"]} bg="blue.100" color="white" transition="0.2s ease" _hover={{bg:'white', color:'blue.100'}} onClick={() => setIsOpenModal(true)}>
                                 Criar novo plano
                                 <Icon as={BsClipboardPlus} fontSize={["15","15","20"]}/>
                             </Button>

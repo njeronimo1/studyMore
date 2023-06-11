@@ -129,7 +129,7 @@ export function CreateObjetive({isOpenModal, handleOpenModal, planoEstudoId, obj
                     <Text fontSize="12"color="#949393">vamos construir seus sonhos!!</Text>
                 </ModalHeader>
                 <ModalCloseButton onClick={handleOpenModal} color="white"/>
-                <ModalBody maxH={["35rem","35rem","50rem"]} overflowY="auto">
+                <ModalBody maxH={["35rem","35rem","45rem"]} overflowY="auto">
                     <FormControl  isRequired>
                         <FormLabel color="whitesmoke" fontSize={["0.9rem","0.95rem","1rem"]}>Titulo:</FormLabel>
                         <Input 
@@ -190,7 +190,7 @@ export function CreateObjetive({isOpenModal, handleOpenModal, planoEstudoId, obj
                         </Flex>
 
                         <FormLabel mt="4" color="whitesmoke" fontSize={["0.9rem","0.95rem","1rem"]}>Agora você pode usar sua imaginação para descrever em texto, tópicos, blocos, as etapas ou o que desejar, sobre seu novo objetivo:</FormLabel>
-                        <Flex w="100%"  color="white" maxH="12rem" height="12rem">
+                        <Flex w="100%"  color="white" maxH="50rem">
                             <ReactQuill theme="snow" value={descricao} onChange={setDescricao} style={{width:'100%', color:'white'}}/>
                         </Flex>
                         <Flex w="100%" mt={["20", "20","14"]}>

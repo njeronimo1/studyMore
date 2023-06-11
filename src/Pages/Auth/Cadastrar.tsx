@@ -79,13 +79,13 @@ export function Cadastrar(){
                             login</Text>
                     </Link>
                 </Box>
-                <form style={{width:'100%'}} onSubmit={handleSubmit(handleRegister)}>
+                <form style={{width:'100%'}} onSubmit={handleSubmit(handleRegister)} >
                     <Flex direction="column" gap="4" mt="5" mb="5" p="4">
                         <Flex direction="column" gap="2">
                             <Text as="label" color="whitesmoke" fontWeight={600}>Nome</Text>
                             <Input type="text" bg="gray.200" placeholder="digite seu nome..." fontSize="13"
                             {...register("nome", { required: true, minLength: 6 })}
-                            color="gray.100" data-testid="inputNome" ></Input>
+                            color="gray.100" data-testid="inputNome" autoComplete="false"></Input>
 
 
                             {/* //erros */}
@@ -94,7 +94,7 @@ export function Cadastrar(){
                         <Flex direction="column" gap="2">
                             <Text as="label" color="whitesmoke"  fontWeight={600}>E-mail</Text>
                             <Input type="email" bg="gray.200" placeholder="digite seu email..." fontSize="13"
-                             {...register("email", {required: true})} data-testid="inputEmail"></Input>
+                             {...register("email", {required: true})} data-testid="inputEmail" autoComplete="false"></Input>
 
 
                             {/* //erros */}
@@ -103,7 +103,7 @@ export function Cadastrar(){
                         <Flex direction="column" gap="2">
                             <Text as="label" color="whitesmoke"  fontWeight={600}>Senha</Text>
                             <Input type="password" bg="gray.200" placeholder="digite sua senha..." fontSize="13"
-                            {...register("password", {required: true, minLength: 8})} data-testid="inputSenha"></Input>
+                            {...register("password", {required: true, minLength: 8})} data-testid="inputSenha" autoComplete="false"></Input>
 
 
                             {/* //erros */}
@@ -112,7 +112,7 @@ export function Cadastrar(){
                         <Flex direction="column" gap="2">
                             <Text as="label" color="whitesmoke"  fontWeight={600}>Confirme sua senha</Text>
                             <Input type="password" bg="gray.200" placeholder="confirme sua senha..." fontSize="13"
-                            {...register("confirmPassword", {required: true, minLength: 8})} data-testid="inputConfirmSenha"></Input>
+                            {...register("confirmPassword", {required: true, minLength: 8})} data-testid="inputConfirmSenha" autoComplete="false"></Input>
 
 
                             {/* //erros */}

@@ -148,7 +148,7 @@ export function DetailPlanoEstudo(){
                 <Flex w="100%" justifyContent="space-between" mt={["12","12","5"]}>
                 <Header title={tituloPage}  subtitle="Aqui você tem o acompanhamento do seu plano, também pode criar objetivos para ele."/>
                 <Button onClick={() => {setObjetivoId(''), setIsOpenModal(true)}} bg="blue.100" color="white" transition="0.2s ease" _hover={{bg:'white', color:'blue.100'}}
-                position={["fixed","fixed","initial"]} bottom={["0.7rem","0.55rem",""]} right={["0.5rem","0.5rem",""]} fontSize={["13","13","1rem"]}>
+                position={["fixed","fixed","initial"]} bottom={["0.7rem","0.55rem",""]} right={["0.5rem","0.5rem",""]} fontSize={["13","13","1rem"]} zIndex="1">
                     <Icon as={GiStairsGoal} fontSize="17" mr="2" />
                     Criar novo objetivo</Button>
                 </Flex>
