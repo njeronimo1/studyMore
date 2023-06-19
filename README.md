@@ -1,5 +1,5 @@
 # 📚 StudyMore
-Aplicativo pra turbinar seus estudos, com login/cadastro, dashboard pra acompanhamento da sua evolução, espaço para organizar seus planos de estudo, objetivos, 
+Ele vai turbinar seus estudos, com login/cadastro, dashboard pra acompanhamento da sua evolução, espaço para organizar seus planos de estudo, objetivos, 
 tarefas e até espaço pra realizar anotações dentro do App, tudo isso para qualquer pessoa que queira organização e conseguir mensurar sua própria performance nos estudos diáriamente.
 
 Técnologias/Ferramentas útilizadas:
