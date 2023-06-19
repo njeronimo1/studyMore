@@ -25,7 +25,7 @@ O Web App foi construído (Layout) utilizando ChakraUI, com diversos componentes
 proporcionando um layout fluído e totalmente responsivo, assim você pode utilizar o App em celulares, tablets, notebooks e desktops.
 
 A parte de login e cadastro, foi construída utilizando a Api de autenticação do Firebase, proporcionando assim maior mobilidade e rapidez ao App, pois além disso
-todos os dados do estão sendo consumidos/gravados no firebase, utilizando o Cloud Firestore para manipulação de dados.
+todos os dados estão sendo consumidos/gravados no firebase, utilizando o Cloud Firestore para manipulação de dados.
 
-O StudyMore é um projeto autentico que foi construído com a ideia de demonstrar uma boa parte dos meus conhecimentos em Front-End, 
-além disso resolvi conectar o app com o Firebase pra entregar algo próximo a "FullStack" de uma forma mais simples e útil.
+O StudyMore é um projeto autêntico que foi construído com a ideia de demonstrar uma boa parte dos meus conhecimentos em Front-End, 
+além disso resolvi conectar o app com o Firebase para entregar algo próximo a "FullStack" de uma forma mais simples e útil.
