@@ -28,4 +28,4 @@ A parte de login e cadastro, foi construída utilizando a Api de autenticação 
 todos os dados estão sendo consumidos/gravados no firebase, utilizando o Cloud Firestore para manipulação de dados.
 
 O StudyMore é um projeto autêntico que foi construído com a ideia de demonstrar uma boa parte dos meus conhecimentos em Front-End, 
-além disso resolvi conectar o app com o Firebase para entregar algo próximo a "FullStack" de uma forma mais simples e útil.
+além disso resolvi conectar o app com o Firebase para entregar algo próximo de "FullStack" com uma forma mais simples e útil.
